@@ -1,4 +1,4 @@
-// frontend/src/components/DemoSimulator.jsx
+//DemoSimulator.jsx
 
 const SCENARIOS = [
   {

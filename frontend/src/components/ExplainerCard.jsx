@@ -1,4 +1,4 @@
-// frontend/src/components/ExplainerCard.jsx
+// ExplainerCard.jsx
 
 import AttackLabel from "./AttackLabel";
 

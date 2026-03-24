@@ -1,11 +1,10 @@
-// frontend/src/components/DomainTimeline.jsx
+// DomainTimeline.jsx
 
 export default function DomainTimeline({ domainAgeSignal }) {
   if (!domainAgeSignal) return null
   if (!domainAgeSignal.legitimate_domain) return null
   if (domainAgeSignal.legitimate_age_days === null) return null
 
-  // hide if both domains are the same — no real comparison to show
   if (domainAgeSignal.suspicious_domain === domainAgeSignal.legitimate_domain) return null
 
   const susAge   = domainAgeSignal.suspicious_age_days

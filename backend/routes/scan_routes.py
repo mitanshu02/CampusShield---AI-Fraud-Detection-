@@ -69,15 +69,27 @@ async def full_scan(request: ScanRequest):
 
     # step 2 — check if typosquatting detected OR demo localhost URL
     typosquat_match = None
+    typosquat_score = 0
     if url_result:
-        typosquat_match = (
-            url_result.get("signals", {})
-                      .get("typosquatting", {})
-                      .get("matched_domain")
-        )
+        typo_signals    = url_result.get("signals", {}).get("typosquatting", {})
+        typosquat_match = typo_signals.get("matched_domain")
+        typosquat_score = typo_signals.get("score", 0)
 
-    is_demo_url     = "localhost" in url or "127.0.0.1" in url
-    run_visual      = typosquat_match is not None or is_demo_url
+    is_demo_url = "localhost" in url or "127.0.0.1" in url
+
+    # only run visual if typosquatting score is HIGH (95)
+    # score 0 means exact match (real domain) or no match — skip visual
+    run_visual = (typosquat_score >= 96) or is_demo_url
+    # typosquat_match = None
+    # if url_result:
+    #     typosquat_match = (
+    #         url_result.get("signals", {})
+    #                   .get("typosquatting", {})
+    #                   .get("matched_domain")
+    #     )
+
+    # is_demo_url     = "localhost" in url or "127.0.0.1" in url
+    # run_visual      = typosquat_match is not None or is_demo_url
 
     # step 3 — run visual and payment in parallel
     async with httpx.AsyncClient(timeout=120.0) as client:

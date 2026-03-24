@@ -1,4 +1,4 @@
-// frontend/src/services/api.js
+// api.js
 
 import axios from "axios"
 

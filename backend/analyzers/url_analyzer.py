@@ -1,4 +1,4 @@
-# backend/analyzers/url_analyzer.py
+# url_analyzer.py
 
 import re
 from rapidfuzz.distance import Levenshtein
@@ -7,7 +7,6 @@ from services.phishtank_service import check_phishtank
 from utils.domain_utils import extract_domain, extract_domain_base
 from utils.scoring_utils import combine_url_scores, get_risk_label, get_risk_colour
 
-# Known legitimate domains to compare against for typosquatting
 KNOWN_DOMAINS = [
     "nitbhopal.ac.in", "iitbombay.ac.in", "iitdelhi.ac.in",
     "du.ac.in", "vtu.ac.in", "amity.edu",

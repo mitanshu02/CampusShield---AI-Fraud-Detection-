@@ -1,4 +1,4 @@
-// frontend/src/components/URLInput.jsx
+//URLInput.jsx
 
 export default function URLInput({ url, setUrl, onScan, loading }) {
   return (

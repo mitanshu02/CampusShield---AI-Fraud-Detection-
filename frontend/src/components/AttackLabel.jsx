@@ -1,4 +1,4 @@
-// frontend/src/components/AttackLabel.jsx
+//AttackLabel.jsx
 
 const HIDE_VALUES = [
   "safe",
